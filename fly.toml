@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for full-stack-helsinki-backend-phonebook on 2023-12-28T20:25:00+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "full-stack-helsinki-backend-phonebook"
+primary_region = "lhr"
+
+[build]
+
+[env]
+  PORT = "3000" # add this
+
+[http_service]
+  internal_port = 3000 # ensure that this is same as PORT
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]

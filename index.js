@@ -1,9 +1,20 @@
 const express = require("express");
-const morgan = require("morgan")
+const morgan = require("morgan");
+const cors = require("cors")
+
 const app = express();
+
 app.use(express.json());
-morgan.token('req-body', (req) => JSON.stringify(req.body));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :req-body'));
+app.use(cors());
+app.use(express.static('dist'))
+
+morgan.token("req-body", (req) => JSON.stringify(req.body));
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms - :req-body"
+  )
+);
+console.log("LLLL")
 
 let persons = [
   {
@@ -35,6 +46,7 @@ const generateId = () => {
 };
 
 app.get("/api/persons", (req, res) => {
+  console.log("GET")
   res.json(persons);
 });
 
@@ -73,18 +85,19 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({ error: "Name is already in databse" });
   }
 
-  persons.push({ id, name, number });
-  res.json(persons);
+  const newPerson = { id, name, number }
 
+  persons.push(newPerson);
+  res.json(newPerson);
 });
 
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-  }
-  
-  app.use(unknownEndpoint)
+  response.status(404).send({ error: "unknown endpoint" });
+};
 
-const PORT = 3001;
+app.use(unknownEndpoint);
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
