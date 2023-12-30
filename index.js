@@ -6,14 +6,15 @@ const Person = require("./models/person");
 const app = express();
 
 app.use(express.json());
+
 app.use(cors());
 app.use(express.static("dist"));
 
 morgan.token("req-body", (req) => JSON.stringify(req.body));
 app.use(
   morgan(
-    ":method :url :status :res[content-length] - :response-time ms - :req-body"
-  )
+    ":method :url :status :res[content-length] - :response-time ms - :req-body",
+  ),
 );
 
 app.get("/api/persons", (req, res, next) => {
@@ -27,8 +28,8 @@ app.get("/api/info", (req, res, next) => {
   Person.find({})
     .then((persons) =>
       res.send(
-        `<p>Phonebook contains ${persons.length} people<p><p>${date}</p>`
-      )
+        `<p>Phonebook contains ${persons.length} people<p><p>${date}</p>`,
+      ),
     )
     .catch((error) => next(error));
 });
